@@ -59,6 +59,7 @@ func main() {
 	}
 
 	log.Println("version " + version + " starting")
+	log.Println("Brad's new version starting")
 
 	// set os signal watcher
 	setupSignals()
