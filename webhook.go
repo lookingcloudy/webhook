@@ -233,6 +233,8 @@ func hookHandler(w http.ResponseWriter, r *http.Request) {
 
 		// if none of the hooks got triggered
 		log.Printf("%s got matched, but didn't get triggered because the trigger rules were not satisfied\n", matchedHook.ID)
+		log.Println(headers)
+		log.Println(payload)
 
 		fmt.Fprintf(w, "Hook rules were not satisfied.")
 	} else {
