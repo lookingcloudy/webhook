@@ -190,6 +190,10 @@ func hookHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
+
+		log.Println(string(body))
+
+
 		// handle hook
 		if err = matchedHook.ParseJSONParameters(&headers, &query, &payload); err != nil {
 			msg := fmt.Sprintf("error parsing JSON parameters: %s", err)
@@ -233,8 +237,6 @@ func hookHandler(w http.ResponseWriter, r *http.Request) {
 
 		// if none of the hooks got triggered
 		log.Printf("%s got matched, but didn't get triggered because the trigger rules were not satisfied\n", matchedHook.ID)
-		log.Println(headers)
-		log.Println(string(json.Marshal(payload)))
 
 		fmt.Fprintf(w, "Hook rules were not satisfied.")
 	} else {
