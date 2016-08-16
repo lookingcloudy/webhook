@@ -35,6 +35,7 @@ var (
 	secure         = flag.Bool("secure", false, "use HTTPS instead of HTTP")
 	cert           = flag.String("cert", "cert.pem", "path to the HTTPS certificate pem file")
 	key            = flag.String("key", "key.pem", "path to the HTTPS certificate private key pem file")
+	debug		= flag.Bool("debug", false, "true outputs the body of json" )
 
 	responseHeaders hook.ResponseHeaders
 
@@ -159,6 +160,10 @@ func hookHandler(w http.ResponseWriter, r *http.Request) {
 
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
+			if debug {
+				log.Println(string(body))
+			}
+
 			log.Printf("error reading the request body. %+v\n", err)
 		}
 
@@ -180,6 +185,10 @@ func hookHandler(w http.ResponseWriter, r *http.Request) {
 			err := decoder.Decode(&payload)
 
 			if err != nil {
+				if debug {
+					log.Println(string(body))
+				}
+
 				log.Printf("error parsing JSON payload %+v\n", err)
 			}
 		} else if strings.Contains(contentType, "form") {
@@ -192,7 +201,6 @@ func hookHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 
-		log.Println(string(body))
 
 
 		// handle hook
@@ -201,6 +209,10 @@ func hookHandler(w http.ResponseWriter, r *http.Request) {
 			log.Printf(msg)
 			w.WriteHeader(http.StatusBadRequest)
 			fmt.Fprintf(w, "Unable to parse JSON parameters.")
+			if debug {
+				log.Println(string(body))
+			}
+
 			return
 		}
 
@@ -238,8 +250,11 @@ func hookHandler(w http.ResponseWriter, r *http.Request) {
 
 		// if none of the hooks got triggered
 		log.Printf("%s got matched, but didn't get triggered because the trigger rules were not satisfied\n", matchedHook.ID)
-
 		fmt.Fprintf(w, "Hook rules were not satisfied.")
+		if debug {
+			log.Println(string(body))
+		}
+
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Hook not found.")
