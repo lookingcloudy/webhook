@@ -160,7 +160,7 @@ func hookHandler(w http.ResponseWriter, r *http.Request) {
 
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
-			if debug {
+			if *debug {
 				log.Println(string(body))
 			}
 
@@ -185,7 +185,7 @@ func hookHandler(w http.ResponseWriter, r *http.Request) {
 			err := decoder.Decode(&payload)
 
 			if err != nil {
-				if debug {
+				if *debug {
 					log.Println(string(body))
 				}
 
@@ -209,7 +209,7 @@ func hookHandler(w http.ResponseWriter, r *http.Request) {
 			log.Printf(msg)
 			w.WriteHeader(http.StatusBadRequest)
 			fmt.Fprintf(w, "Unable to parse JSON parameters.")
-			if debug {
+			if *debug {
 				log.Println(string(body))
 			}
 
@@ -251,7 +251,7 @@ func hookHandler(w http.ResponseWriter, r *http.Request) {
 		// if none of the hooks got triggered
 		log.Printf("%s got matched, but didn't get triggered because the trigger rules were not satisfied\n", matchedHook.ID)
 		fmt.Fprintf(w, "Hook rules were not satisfied.")
-		if debug {
+		if *debug {
 			log.Println(string(body))
 		}
 
