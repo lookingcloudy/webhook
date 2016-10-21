@@ -68,6 +68,9 @@ You can use [almir/webhook](https://hub.docker.com/r/almir/webhook/) docker imag
 # Examples
 Check out [Hook examples page](https://github.com/adnanh/webhook/wiki/Hook-Examples) for more complex examples of hooks.
 
+Added a special source to search for bitbucket branches and tags.  Use source = "bitbucket-branch" or "bitbucket-tag".  This searches "new" in all pushed changes for the value specified.  Can use either "value" match or "regex" match.
+
+
 # Contributing
 Any form of contribution is welcome and highly appreciated.
 

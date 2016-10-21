@@ -23,6 +23,8 @@ const (
 	SourceEntirePayload string = "entire-payload"
 	SourceEntireQuery   string = "entire-query"
 	SourceEntireHeaders string = "entire-headers"
+	SourceBitBucketBranch string = "bitbucket-branch"
+	SourceBitBucketTag string = "bitbucket-tag"
 )
 
 const (
@@ -508,7 +510,35 @@ const (
 
 // Evaluate MatchRule will return based on the type
 func (r MatchRule) Evaluate(headers, query, payload *map[string]interface{}, body *[]byte) (bool, error) {
-	if arg, ok := r.Parameter.Get(headers, query, payload); ok {
+	// added support for bitbucket branch/tags
+	// searches all changes for branches and tags to match the values
+	if r.Parameter.Source == SourceBitBucketBranch || r.Parameter.Source == SourceBitBucketTag {
+		var srchType string = ""
+		switch r.Parameter.Source {
+		case SourceBitBucketBranch:
+			srchType = "branch"
+		case SourceBitBucketTag:
+			srchType = "tag"
+		}
+
+		push := BitPush{}
+		e := json.Unmarshal(*body, &push)
+		if e != nil {
+			return false, e
+		}
+
+		for _, change := range push.Push.Changes {
+			if change.New.Type == srchType {
+				switch r.Type {
+				case MatchValue:
+					return r.Value == change.New.Name, nil
+				case MatchRegex:
+					return regexp.MatchString(r.Regex, change.New.Name)
+				}
+			}
+		}
+
+	} else if arg, ok := r.Parameter.Get(headers, query, payload); ok {
 		switch r.Type {
 		case MatchValue:
 			return arg == r.Value, nil

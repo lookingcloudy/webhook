@@ -1,0 +1,27 @@
+[
+  {
+    "id": "I5OffU5dUUuN",
+    "execute-command": "/root/floodquote/deploy.sh",
+    "command-working-directory": "/root/floodquote",
+    "pass-arguments-to-command": [
+      {
+        "source": "payload",
+        "name": "push.changes.0.new.name"
+      },
+      {
+        "source": "payload",
+        "name": "push.changes.1.new.name"
+      }
+    ],
+    "trigger-rule": {
+      "match": {
+        "type": "value",
+        "value": "develop",
+        "parameter": {
+          "source": "bitbucket-branch",
+          "name": "name"
+        }
+      }
+    }
+  }
+]
