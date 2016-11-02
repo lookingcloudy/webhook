@@ -1,0 +1,14 @@
+[
+  {
+    "id": "dev-builds",
+    "execute-command": "/usr/bin/env bash echo $1",
+    "command-working-directory": "/home/adnan/go",
+    "response-message": "I got the payload!",
+    "trigger-rule":
+    {
+      "type": "regex",
+      "source": "tag",
+      "value": "^.*-dev$"
+    }
+  }
+]

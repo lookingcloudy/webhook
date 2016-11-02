@@ -1,0 +1,14 @@
+[
+  {
+    "id": "develop",
+    "execute-command": "/home/adnan/redeploy-go-webhook.sh",
+    "command-working-directory": "/home/adnan/go",
+    "response-message": "I got the payload!",
+    "trigger-rule":
+    {
+      "type": "value",
+      "source": "branch",
+      "value": "develop"
+    }
+  }
+]

@@ -10,7 +10,8 @@
       "source": "branch",
       "value": "develop"
     }
-  },
+  }
+,
   {
     "id": "qa-builds",
     "execute-command": "/home/adnan/redeploy-go-webhook.sh",
